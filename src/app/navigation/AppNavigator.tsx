@@ -7,32 +7,42 @@ import ChatsScreen from '../../features/Chat/screens/ChatsScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ChatDetailScreen from '../../features/Chat/screens/ChatDetailScreen';
 import ProfileScreen from '../../features/Profile/screens/ProfileScreen';
-import RegisterScreen from '../../features/Auth/screens/RegisterScreen';
-import LoginScreen from '../../features/Auth/screens/LoginScreen';
+import RegisterScreen from '../../features/auth/screens/RegisterScreen';
+import LoginScreen from '../../features/auth/screens/LoginScreen';
+import { useAuth } from '../../features/auth/context/AuthContext';
 
 const Tab = createBottomTabNavigator();
 const RootStack = createNativeStackNavigator();
 
-const mainTabs = () => {
+const MainTabs = () => {
+  const { isLoggedIn } = useAuth();
+
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
       <Tab.Screen name="Catalog" component={HomeScreen} options={{ title: 'Catalog' }} />
       <Tab.Screen name="Cart" component={CartScreen} options={{ title: 'Cart' }} />
-      <Tab.Screen name="Chats" component={ChatsScreen} options={{ title: 'Chats' }} />
+      {isLoggedIn ? <Tab.Screen name="Chats" component={ChatsScreen} options={{ title: 'Chats' }} /> : null}
       <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profile' }} />
     </Tab.Navigator>
   )
 }
 
 export default function AppNavigator() {
+  const { isLoggedIn } = useAuth();
+
   return (
     <NavigationContainer>
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
-        <RootStack.Screen name='mainTabs' component={mainTabs} />
+        <RootStack.Screen name='mainTabs' component={MainTabs} />
 
-        <RootStack.Screen name='chatDetailScreen' component={ChatDetailScreen} />
-        <RootStack.Screen name='registerScreen' component={RegisterScreen} />
-        <RootStack.Screen name='loginScreen' component={LoginScreen} />
+        {isLoggedIn ? (
+          <RootStack.Screen name='chatDetailScreen' component={ChatDetailScreen} />
+        ) : (
+          <>
+            <RootStack.Screen name='registerScreen' component={RegisterScreen} />
+            <RootStack.Screen name='loginScreen' component={LoginScreen} />
+          </>
+        )}
       </RootStack.Navigator>
     </NavigationContainer>
   );

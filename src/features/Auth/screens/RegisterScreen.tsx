@@ -26,7 +26,7 @@ const RegisterScreen = () => {
           onChangeText={setEmail}
         />
         <TextInput
-          placeholder="password" 
+          placeholder="password"
           value={password}
           onChangeText={setPassword}
         />

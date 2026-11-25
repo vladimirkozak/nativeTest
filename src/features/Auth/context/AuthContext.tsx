@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { clearTokens, loadTokens, saveTokens } from "../tokenStorage";
 import { request } from "../../../shared/api/client";
+import { Alert } from "react-native";
 
 const AuthContext = createContext(null);
 
@@ -20,6 +21,7 @@ export const AuthProvider = ({ children }) => {
 
     await saveTokens(tokens);
     setIsLoggedIn(true);
+    Alert.alert('ok');
   };
 
   const value = {
@@ -29,7 +31,7 @@ export const AuthProvider = ({ children }) => {
     logout: async () => {
       await clearTokens();
       setIsLoggedIn(false);
-      console.log('logout success');
+      Alert.alert('logout success');
     },
   };
 
